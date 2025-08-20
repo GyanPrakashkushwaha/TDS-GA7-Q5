@@ -32,15 +32,16 @@ df = pd.DataFrame(data, columns=["Month", "Segment", "Revenue"])
 df["Month"] = pd.Categorical(df["Month"], categories=months, ordered=True)
 
 # Create the lineplot
-plt.figure(figsize=(8, 8))
-ax = sns.lineplot(
+fig, ax = plt.subplots(figsize=(8, 8))  # Base figure
+sns.lineplot(
     data=df,
     x="Month",
     y="Revenue",
     hue="Segment",
     marker="o",
     palette="Set2",
-    linewidth=2.5
+    linewidth=2.5,
+    ax=ax
 )
 
 # Customize chart for executive presentation
@@ -50,6 +51,7 @@ plt.ylabel("Revenue (USD)", fontsize=12)
 plt.xticks(rotation=45)
 plt.legend(title="Customer Segment", fontsize=10, title_fontsize=11)
 
-# Save as 512x512 PNG
-plt.savefig("chart.png", dpi=64, bbox_inches="tight")
+# Force EXACT 512x512 pixels → dpi = pixels / inches
+fig.set_size_inches(512/96, 512/96)  # 5.333x5.333 inches
+plt.savefig("chart.png", dpi=96)  # 96 dpi × 5.333 in = 512 px
 plt.close()
